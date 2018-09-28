@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: False
+  vars:
+    app_user: redirector
+    webroot: /home/{{app_user}}/server
+    letsencrypt_email: infrastructure@bocoup.com
+
+  tasks:
+    - include: tasks/server.yml
+
+    - include: tasks/certbot.yml
+      when: not development_mode
+
+  handlers:
+    - name: Restart ssh
+      service: name=ssh state=restarted
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: True
+    - name: Restart journald daemon
+      systemd:
+        name: systemd-journald
+        state: restarted
+    - name: Restart server
+      systemd:
+        name: redirector
+        state: restarted

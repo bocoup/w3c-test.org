@@ -1,0 +1,6 @@
+---
+appserver:
+  hosts:
+    localhost:
+      ansible_connection: local
+      development_mode: True
