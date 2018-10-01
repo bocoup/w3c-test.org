@@ -17,14 +17,7 @@
   handlers:
     - name: Restart ssh
       service: name=ssh state=restarted
-    - name: Reload systemd daemon
+    - name: Reload nginx
       systemd:
-        daemon_reload: True
-    - name: Restart journald daemon
-      systemd:
-        name: systemd-journald
-        state: restarted
-    - name: Restart server
-      systemd:
-        name: redirector
-        state: restarted
+        name: nginx
+        state: reloaded
